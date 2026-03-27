@@ -3,38 +3,246 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TOOL ABC - 2026</title>
+    <title>abc.club - Phiên Bản Admin Control</title>
     <style>
-        body { background-color: #0d0d0d; color: #fff; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .card { width: 90%; max-width: 360px; background: #1a1a1a; border-radius: 20px; padding: 20px; text-align: center; border-top: 4px solid #ffcc00; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        h1 { color: #ffcc00; margin: 0; font-size: 28px; }
-        .link { background: #0088cc; color: #fff; text-decoration: none; display: block; padding: 10px; margin: 15px 0; border-radius: 10px; font-weight: bold; }
-        input { width: 100%; padding: 12px; margin: 10px 0; background: #222; border: 1px solid #333; color: #fff; border-radius: 8px; box-sizing: border-box; }
-        button { width: 100%; padding: 15px; background: linear-gradient(135deg, #ffcc00, #ff8800); border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        #res { height: 80px; background: #000; margin-top: 15px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 30px; font-weight: bold; }
-        .tai { color: #ff3e3e; } .xiu { color: #3e88ff; }
+        :root { --gold: #ffcf4b; --dark: #020617; }
+        body {
+            margin: 0; font-family: -apple-system, sans-serif;
+            background: radial-gradient(circle, #1e293b, #020617);
+            color: white; height: 100vh; display: flex; justify-content: center; align-items: center;
+            overflow: hidden; touch-action: none;
+        }
+
+        .container {
+            width: 350px; background: rgba(15, 23, 42, 0.95);
+            border: 2px solid var(--gold); border-radius: 30px;
+            padding: 20px; text-align: center; position: relative;
+            box-shadow: 0 0 50px rgba(0,0,0,1); display: none;
+        }
+
+        .brand { font-size: 28px; font-weight: 900; color: var(--gold); text-shadow: 0 0 10px gold; margin-bottom: 10px; }
+        
+        .dice-area {
+            position: relative; width: 170px; height: 170px;
+            margin: 0 auto 15px; background: #0f172a;
+            border-radius: 50%; border: 6px solid #334155;
+            display: flex; justify-content: center; align-items: center;
+            box-shadow: inset 0 0 30px #000;
+        }
+
+        .dice {
+            font-size: 40px; margin: 3px; background: white; color: black;
+            border-radius: 10px; width: 45px; height: 45px;
+            line-height: 45px; text-align: center; font-weight: bold;
+            box-shadow: inset -2px -2px 4px #ccc, 2px 2px 8px rgba(0,0,0,0.5);
+        }
+
+        #bowl {
+            position: absolute; width: 100%; height: 100%;
+            background: radial-gradient(circle, #475569, #1e293b);
+            border-radius: 50%; z-index: 20; display: none; cursor: grab;
+            box-shadow: 0 5px 15px #000;
+        }
+
+        .bet-input {
+            width: 80%; padding: 12px; border-radius: 10px;
+            border: 2px solid #334155; background: #000;
+            color: var(--gold); font-size: 22px; text-align: center; margin-bottom: 15px;
+        }
+
+        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .btn { padding: 15px; border-radius: 15px; border: none; font-size: 20px; font-weight: bold; color: white; }
+        .tai { background: linear-gradient(#22c55e, #166534); }
+        .xiu { background: linear-gradient(#ef4444, #991b1b); }
+        .btn:disabled { opacity: 0.5; filter: grayscale(1); }
+        
+        #nap-modal {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: #1e293b; border: 2px solid var(--gold); padding: 15px;
+            border-radius: 20px; z-index: 100; display: none; width: 310px;
+        }
+        .nap-content { display: flex; align-items: center; justify-content: space-between; }
+        .qr-code { width: 100px; height: 100px; background: white; padding: 5px; border-radius: 8px; }
+        .qr-code img { width: 100%; height: 100%; }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h1>TOOL ABC</h1>
-        <a href="https://t.me/abc_631" class="link">MUA KEY TELE: abc_631</a>
-        <input type="password" id="k" placeholder="Nhập Key kích hoạt...">
-        <button onclick="run()">PHÂN TÍCH</button>
-        <div id="res">READY</div>
+
+<div id="auth-screen" style="text-align: center;">
+    <div class="brand">abc.club</div>
+    <input type="text" id="key-input" placeholder="Key: hieu55" style="padding:12px; border-radius:8px; margin-bottom:10px; border:none; text-align:center;"><br>
+    <button onclick="checkKey()" style="padding:12px 40px; background:var(--gold); border:none; border-radius:8px; font-weight:bold;">VÀO GAME</button>
+</div>
+
+<div class="container" id="game-container">
+    <a href="https://t.me/abc_631" style="color:var(--gold); font-size:11px; display:block; margin-bottom:15px; text-decoration:none;">Mua Xu Giải Trí Liên Hệ Telegram: @abc_631 →</a>
+    
+    <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+        <span style="background:#334155; padding:5px 15px; border-radius:20px;">💰 <b id="balance-val">0</b></span>
+        <button onclick="showNap()" style="background:var(--gold); border:none; padding:5px 15px; border-radius:20px; font-weight:bold; font-size:12px;">NẠP XU</button>
     </div>
-    <script>
-        function run() {
-            const k = document.getElementById('k').value;
-            const r = document.getElementById('res');
-            if(k !== "abc123") { alert("Sai Key!"); return; }
-            r.innerHTML = "SCAN...";
-            setTimeout(() => {
-                const s = Math.random() > 0.5 ? "TÀI" : "XỈU";
-                r.innerHTML = s;
-                r.className = s === "TÀI" ? "tai" : "xiu";
-            }, 1000);
+
+    <div class="brand">abc.club</div>
+    <p id="status" style="font-size:12px; color:#94a3b8; height: 15px;">Chào mừng đại ca!</p>
+
+    <div class="dice-area">
+        <div id="bowl"></div>
+        <div id="dice-wrap" style="display:flex;">
+            <div class="dice" id="d1">?</div>
+            <div class="dice" id="d2">?</div>
+            <div class="dice" id="d3">?</div>
+        </div>
+    </div>
+
+    <input type="number" id="bet-amt" class="bet-input" placeholder="Tiền cược (Min 100)" value="100">
+
+    <div class="btn-group">
+        <button class="btn tai" id="btn-tai" onclick="play('tai')">TÀI</button>
+        <button class="btn xiu" id="btn-xiu" onclick="play('xiu')">XỈU</button>
+    </div>
+</div>
+
+<div id="nap-modal">
+    <h3 style="color:var(--gold); margin:0 0 10px 0; font-size:16px;">THÔNG TIN NẠP</h3>
+    <div class="nap-content">
+        <div style="text-align: left; font-size: 12px;">
+            MB BANK<br>STK: <b style="color:var(--gold)">360116</b><br>Nội dung: <b id="ma-gd">---</b>
+        </div>
+        <div class="qr-code"><img src="https://i.imgur.com/GscT2fP.png"></div>
+    </div>
+    <div id="countdown-text" style="color:#ef4444; font-size:12px; margin-top:10px;">Hết hạn sau: 03:00</div>
+    <button onclick="document.getElementById('nap-modal').style.display='none'" style="margin-top:10px; width:100%; padding:8px; border:none; background:#475569; color:white; border-radius:8px;">ĐÓNG</button>
+</div>
+
+<script>
+    let balance = 0;
+    let isSqueezing = false;
+    let startY = 0;
+    let currentChoice = "";
+    let currentBet = 0;
+
+    // KHỞI TẠO USER & KHÓA IP FREE 5000
+    function initUser() {
+        let savedBalance = localStorage.getItem('user_balance');
+        let hasReceivedGift = localStorage.getItem('received_gift');
+
+        if (hasReceivedGift === 'true') {
+            balance = parseInt(savedBalance) || 0;
+        } else {
+            balance = 5000;
+            localStorage.setItem('received_gift', 'true');
+            localStorage.setItem('user_balance', balance);
         }
-    </script>
+        updateBalanceDisplay();
+    }
+
+    function updateBalanceDisplay() {
+        document.getElementById('balance-val').innerText = balance.toLocaleString();
+        localStorage.setItem('user_balance', balance);
+    }
+
+    // LẮNG NGHE LỆNH TỪ ADMIN (CỘNG TIỀN)
+    window.addEventListener('storage', (e) => {
+        if (e.key === 'balance_update_signal' || e.key === 'user_balance') {
+            balance = parseInt(localStorage.getItem('user_balance')) || 0;
+            document.getElementById('balance-val').innerText = balance.toLocaleString();
+        }
+    });
+
+    function checkKey() {
+        if(document.getElementById('key-input').value === 'hieu55') {
+            document.getElementById('auth-screen').style.display='none';
+            document.getElementById('game-container').style.display='block';
+            initUser();
+        } else alert("Key sai!");
+    }
+
+    function play(choice) {
+        let amt = parseInt(document.getElementById('bet-amt').value);
+        if(amt < 100) return alert("Cược tối thiểu 100!");
+        if(amt > balance) return alert("Số dư không đủ!");
+
+        currentBet = amt;
+        currentChoice = choice;
+        balance -= currentBet; // TRỪ TIỀN NGAY LẬP TỨC (CHỐNG HỦY)
+        updateBalanceDisplay();
+        
+        document.getElementById('btn-tai').disabled = true;
+        document.getElementById('btn-xiu').disabled = true;
+        document.getElementById('status').innerText = "Đang lắc...";
+
+        setTimeout(() => {
+            setupResult();
+            document.getElementById('bowl').style.display = 'block';
+            document.getElementById('bowl').style.transform = 'translate(0, 0)';
+            document.getElementById('status').innerText = "HÃY NẶN BÁT!";
+        }, 800);
+    }
+
+    // HÀM SETUP KẾT QUẢ CÓ CAN THIỆP CỦA ADMIN
+    function setupResult() {
+        let d = [0, 0, 0];
+        let adminForce = localStorage.getItem('admin_next_result') || 'random';
+
+        if (adminForce === 'tai') {
+            d = [Math.floor(Math.random()*3)+4, Math.floor(Math.random()*3)+4, Math.floor(Math.random()*2)+3]; 
+        } else if (adminForce === 'xiu') {
+            d = [Math.floor(Math.random()*3)+1, Math.floor(Math.random()*3)+1, Math.floor(Math.random()*2)+1];
+        } else {
+            d = [Math.floor(Math.random()*6)+1, Math.floor(Math.random()*6)+1, Math.floor(Math.random()*6)+1];
+        }
+        
+        localStorage.setItem('admin_next_result', 'random'); // Xóa lệnh ép sau khi dùng
+
+        let sum = d[0] + d[1] + d[2];
+        let icons = ["⚀","⚁","⚂","⚃","⚄","⚅"];
+        document.getElementById('d1').innerText = icons[d[0]-1];
+        document.getElementById('d2').innerText = icons[d[1]-1];
+        document.getElementById('d3').innerText = icons[d[2]-1];
+        window.gameRes = (sum >= 11) ? "tai" : "xiu";
+        window.gameSum = sum;
+    }
+
+    const bowl = document.getElementById('bowl');
+    bowl.addEventListener('touchstart', (e) => { isSqueezing = true; startY = e.touches[0].clientY; });
+    bowl.addEventListener('touchmove', (e) => {
+        if(!isSqueezing) return;
+        let deltaY = e.touches[0].clientY - startY;
+        if(deltaY > 0) {
+            bowl.style.transform = `translateY(${deltaY}px) rotate(${deltaY/12}deg)`;
+            if(deltaY > 130) {
+                isSqueezing = false;
+                bowl.style.display = 'none';
+                finish();
+            }
+        }
+    });
+
+    function finish() {
+        let status = document.getElementById('status');
+        if(currentChoice === window.gameRes) {
+            let winAmt = currentBet * 2;
+            balance += winAmt;
+            status.innerHTML = `<b style="color:#22c55e">THẮNG +${winAmt}</b> (Tổng: ${window.gameSum})`;
+        } else {
+            status.innerHTML = `<b style="color:#ef4444">THUA -${currentBet}</b> (Tổng: ${window.gameSum})`;
+        }
+        updateBalanceDisplay();
+        document.getElementById('btn-tai').disabled = false;
+        document.getElementById('btn-xiu').disabled = false;
+    }
+
+    function showNap() {
+        let now = Date.now();
+        let expire = localStorage.getItem('qr_expire');
+        if (!expire || now > expire) {
+            let ma = "ABC" + Math.floor(100000 + Math.random() * 899999);
+            localStorage.setItem('qr_expire', now + 180000);
+            localStorage.setItem('qr_content', ma);
+        }
+        document.getElementById('ma-gd').innerText = localStorage.getItem('qr_content');
+        document.getElementById('nap-modal').style.display = 'block';
+    }
+</script>
 </body>
 </html>
