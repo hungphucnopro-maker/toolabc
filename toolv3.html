@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOOL ABC - Support Sunwin & Hit Club</title>
+    <style>
+        body { background-color: #0d0d0d; color: #ffffff; font-family: 'Segoe UI', Roboto, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .tool-card { width: 92%; max-width: 380px; background: #1a1a1a; border: 2px solid #222; border-radius: 25px; padding: 25px; box-shadow: 0 20px 50px rgba(0,0,0,1); text-align: center; border-top: 4px solid #ffcc00; }
+        
+        .tool-title { font-size: 35px; color: #ffcc00; font-weight: 900; margin: 0; text-transform: uppercase; letter-spacing: 2px; }
+        .sub-title { font-size: 14px; color: #00ffcc; font-weight: bold; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .game-list { font-size: 13px; color: #888; margin-bottom: 15px; }
+        .support-link { color: #ffffff; text-decoration: none; font-size: 14px; font-weight: bold; display: block; margin-bottom: 25px; background: linear-gradient(90deg, #0088cc, #005588); padding: 10px; border-radius: 12px; border: 1px solid #00aaff; box-shadow: 0 4px 10px rgba(0, 136, 204, 0.3); }
+        
+        .input-box { text-align: left; margin-bottom: 15px; position: relative; }
+        label { font-size: 11px; color: #666; text-transform: uppercase; font-weight: bold; margin-left: 5px; }
+        
+        input[type="password"], input[type="text"] { width: 100%; padding: 14px; padding-right: 45px; margin-top: 5px; background: #252525; border: 1px solid #333; color: #fff; border-radius: 12px; box-sizing: border-box; outline: none; transition: 0.3s; font-weight: bold; }
+        input:focus { border-color: #ffcc00; background: #2a2a2a; }
+
+        /* Icon mắt tắt mở */
+        .toggle-password { position: absolute; right: 15px; top: 32px; cursor: pointer; color: #888; font-size: 18px; user-select: none; }
+
+        .history-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 10px 0; }
+        .history-grid select { padding: 12px 0; background: #252525; color: white; border: 1px solid #333; border-radius: 10px; cursor: pointer; text-align: center; font-weight: bold; appearance: none; outline: none; }
+
+        #result-area { height: 130px; display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: 20px; background: #000; margin: 20px 0; border: 1px solid #333; box-shadow: inset 0 0 15px rgba(255, 204, 0, 0.1); }
+        #prediction { font-size: 55px; font-weight: 900; margin: 0; letter-spacing: 3px; }
+        #percent { font-size: 20px; color: #00ff00; margin-top: 5px; font-weight: bold; font-family: monospace; }
+
+        .btn-predict { width: 100%; padding: 18px; border: none; border-radius: 15px; background: linear-gradient(135deg, #ffcc00, #ff8800); color: #000; font-weight: bold; font-size: 18px; cursor: pointer; text-transform: uppercase; transition: 0.2s; box-shadow: 0 6px 20px rgba(255, 136, 0, 0.4); }
+        .btn-predict:active { transform: scale(0.97); }
+
+        .blink { animation: flash 0.35s step-end infinite; }
+        @keyframes flash { 50% { opacity: 0; } }
+        
+        .tai-color { color: #ff3e3e; text-shadow: 0 0 30px rgba(255, 62, 62, 0.8); }
+        .xiu-color { color: #3e88ff; text-shadow: 0 0 30px rgba(62, 136, 255, 0.8); }
+    </style>
+</head>
+<body>
+
+<div class="tool-card">
+    <h1 class="tool-title">TOOL ABC</h1>
+    <div class="sub-title">Dự Đoán Sunwin - Hit Club</div>
+    <div class="game-list">Hệ thống phân tích dữ liệu AI</div>
+    
+    <a href="https://t.me/abc_631" class="support-link">Mua Key Liên Hệ: abc_631</a>
+
+    <div class="input-box">
+        <label>Nhập Mã Key Kích Hoạt:</label>
+        <input type="password" id="userKey" placeholder="Mua key nhắn tin Tele...">
+        <span class="toggle-password" onclick="toggleKey()">👁️</span>
+    </div>
+
+    <div class="input-box">
+        <label>Dữ liệu 5 phiên gần nhất:</label>
+        <div class="history-grid">
+            <select id="s1"><option value="T">T</option><option value="X">X</option></select>
+            <select id="s2"><option value="T">T</option><option value="X">X</option></select>
+            <select id="s3"><option value="T">T</option><option value="X">X</option></select>
+            <select id="s4"><option value="T">T</option><option value="X">X</option></select>
+            <select id="s5"><option value="T">T</option><option value="X">X</option></select>
+        </div>
+    </div>
+
+    <button class="btn-predict" onclick="runTool()">Phân Tích Kết Quả</button>
+
+    <div id="result-area">
+        <p id="prediction">READY</p>
+        <p id="percent">SYSTEM SECURE</p>
+    </div>
+</div>
+
+<script>
+    // Hàm ẩn hiện Key
+    function toggleKey() {
+        const keyInput = document.getElementById('userKey');
+        if (keyInput.type === "password") {
+            keyInput.type = "text";
+        } else {
+            keyInput.type = "password";
+        }
+    }
+
+    function runTool() {
+        const keyInput = document.getElementById('userKey').value;
+        const predText = document.getElementById('prediction');
+        const percentText = document.getElementById('percent');
+        
+        if (keyInput !== "abc123") {
+            alert("Sai mã Key! Vui lòng nhắn tin Tele abc_631 để mua key kích hoạt.");
+            return;
+        }
+
+        predText.innerHTML = "ĐANG QUÉT...";
+        predText.className = "";
+        percentText.innerHTML = "Calculating...";
+
+        setTimeout(() => {
+            const results = ["TÀI", "XỈU"];
+            const side = results[Math.floor(Math.random() * results.length)];
+            const winRate = Math.floor(Math.random() * (99 - 60 + 1)) + 60;
+
+            predText.innerHTML = side;
+            
+            if (side === "TÀI") {
+                predText.className = "tai-color blink";
+            } else {
+                predText.className = "xiu-color blink";
+            }
+
+            percentText.innerHTML = "Tỉ lệ chính xác: " + winRate + "%";
+        }, 1500);
+    }
+</script>
+
+</body>
+</html>
