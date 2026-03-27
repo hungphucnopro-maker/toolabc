@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TOOL ABC - 2026</title>
+    <style>
+        body { background-color: #0d0d0d; color: #fff; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .card { width: 90%; max-width: 360px; background: #1a1a1a; border-radius: 20px; padding: 20px; text-align: center; border-top: 4px solid #ffcc00; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h1 { color: #ffcc00; margin: 0; font-size: 28px; }
+        .link { background: #0088cc; color: #fff; text-decoration: none; display: block; padding: 10px; margin: 15px 0; border-radius: 10px; font-weight: bold; }
+        input { width: 100%; padding: 12px; margin: 10px 0; background: #222; border: 1px solid #333; color: #fff; border-radius: 8px; box-sizing: border-box; }
+        button { width: 100%; padding: 15px; background: linear-gradient(135deg, #ffcc00, #ff8800); border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        #res { height: 80px; background: #000; margin-top: 15px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 30px; font-weight: bold; }
+        .tai { color: #ff3e3e; } .xiu { color: #3e88ff; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>TOOL ABC</h1>
+        <a href="https://t.me/abc_631" class="link">MUA KEY TELE: abc_631</a>
+        <input type="password" id="k" placeholder="Nhập Key kích hoạt...">
+        <button onclick="run()">PHÂN TÍCH</button>
+        <div id="res">READY</div>
+    </div>
+    <script>
+        function run() {
+            const k = document.getElementById('k').value;
+            const r = document.getElementById('res');
+            if(k !== "abc123") { alert("Sai Key!"); return; }
+            r.innerHTML = "SCAN...";
+            setTimeout(() => {
+                const s = Math.random() > 0.5 ? "TÀI" : "XỈU";
+                r.innerHTML = s;
+                r.className = s === "TÀI" ? "tai" : "xiu";
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
